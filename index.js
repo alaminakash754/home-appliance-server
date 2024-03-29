@@ -29,6 +29,7 @@ async function run() {
     // await client.connect();
     const productCollection = client.db('homeApplianceDb').collection("products");
     const cartCollection = client.db('homeApplianceDb').collection("carts");
+    const userCollection = client.db('homeApplianceDb').collection("users");
 
 
      // jwt related api
@@ -41,19 +42,23 @@ async function run() {
     })
 
 
+    // user related api 
+    app.get('/users', async(req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    })
+
+
     app.get('/products', async(req, res) => {
         const result = await productCollection.find().toArray();
-        console.log(result);
         res.send(result);
     })
 
 
     app.get('/products/:id', async(req, res) => {
         const id = req.params.id;
-        console.log(id)
         const query = {_id: id};
         const result = await productCollection.findOne(query);
-        console.log(result);
         res.send(result);
       })
 
