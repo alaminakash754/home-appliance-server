@@ -28,6 +28,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const productCollection = client.db('homeApplianceDb').collection("products");
+    const cartCollection = client.db('homeApplianceDb').collection("carts");
 
 
      // jwt related api
@@ -42,6 +43,7 @@ async function run() {
 
     app.get('/products', async(req, res) => {
         const result = await productCollection.find().toArray();
+        console.log(result);
         res.send(result);
     })
 
@@ -54,7 +56,21 @@ async function run() {
         console.log(result);
         res.send(result);
       })
-      
+
+      // cart collection 
+      app.post('/carts', async(req, res) => {
+        const cartItem = req.body;
+        const result = await cartCollection.insertOne(cartItem);
+        res.send(result);
+      })
+
+      app.get('/carts', async(req, res) => {
+        const email = req.query.email;
+        const query = {email: email};
+        const result = await cartCollection.find(query).toArray();
+        res.send(result);
+      })
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
