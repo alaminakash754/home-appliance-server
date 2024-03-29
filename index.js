@@ -60,7 +60,7 @@ async function run() {
     }
 
     // user related api 
-    app.get('/users', async(req, res) => {
+    app.get('/users', verifyToken, async(req, res) => {
       const result = await userCollection.find().toArray();
       res.send(result);
     })
@@ -91,7 +91,7 @@ async function run() {
       res.send({admin});
     })
 
-    app.patch('/users/admin/:id', async(req, res) => {
+    app.patch('/users/admin/:id',verifyToken, async(req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id)}
       const updatedDoc = {
@@ -103,6 +103,7 @@ async function run() {
       res.send(result);
     })
 
+// products related api 
 
     app.get('/products', async(req, res) => {
         const result = await productCollection.find().toArray();
